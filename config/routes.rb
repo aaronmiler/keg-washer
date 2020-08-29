@@ -1,3 +1,10 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  get 'dashboard/index'
+  root to: 'dashboard#index'
+  get '/broadcast', to: 'dashboard#broadcast', as: :broadcast
+  get '/button', to: 'dashboard#set_button', as: :button
+  mount ActionCable.server,  at: '/cable'
+  mount Sidekiq::Web => '/sidekiq'
 end

@@ -6,9 +6,12 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
+    "@rails/webpacker": "^5.2.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "cortexjs": "^2.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-actioncable-provider": "^2.0.0",
     "react-dom": "^16.13.1",
     "turbolinks": "^5.2.0"
   },

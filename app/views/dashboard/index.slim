@@ -1,0 +1,14 @@
+h1 Hello
+#app
+
+= react 'App', 'app', { \
+  baseUrl: Rails.configuration.host,
+  red: {},
+  green: {},
+}
+
+
+= link_to 'Send Message', broadcast_path(button: 'red', message: 'Hello World'), remote: true
+
+= link_to 'Set Red Off', button_path(button: 'red', value: false), remote: true
+= link_to 'Set Green Off', button_path(button: 'red', value: false), remote: true

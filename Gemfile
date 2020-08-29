@@ -29,7 +29,10 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'redis'
+gem 'redis-namespace'
 gem 'sidekiq'
+gem 'slim-rails'
+gem 'daemons'
 
 
 group :development, :test do

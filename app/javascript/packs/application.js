@@ -8,10 +8,30 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 
+window.React = require("react")
+window.ReactDOM = require("react-dom")
 
-// Uncomment to copy all static images under ../images to the output folder and reference
-// them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
-// or the `imagePath` JavaScript helper below.
-//
-// const images = require.context('../images', true)
-// const imagePath = (name) => images(name, true)
+import App from './AppLayout'
+
+window.Components = {
+  App: App,
+}
+
+window.mountReactComponent = function(name, id, data) {
+  var component, element, target;
+  target = document.getElementById(id);
+  component = Components[name];
+  if (!target && window.console) {
+    return console.warn('Could not find element %c#' + id, 'font-family: monospace');
+  }
+  if (!component && window.console) {
+    return console.warn('Could not find component %c' + name, 'font-family: monospace');
+  }
+
+  element = React.createElement(component, { data: data });
+  ReactDOM.render(element, target, function() {
+    document.addEventListener('page:before-unload', function() {
+      ReactDOM.unmountComponentAtNode(target);
+    });
+  });
+};
