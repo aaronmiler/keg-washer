@@ -1,7 +1,7 @@
 module Cycle
 
   @cycles = {
-    empty: %i[ drain pause ],
+    empty: %i[ drain ],
     water: %i[ pump drain water pause ],
     air: %i[ air drain pause ],
     cleaner: %i[ pump cleaner cleaner_return water pause ],
@@ -37,17 +37,40 @@ module Cycle
     end
     redis.set("completed", Time.now)
     "Complete"
+  ensure
+    warn "Cleanup Time"
+    Pins.cleanup
   end
 
   def step(step)
+    duration = settings[step] || 5
+    warn "Cycle: #{step}"
+
     cycle = @cycles[step]
+    pause = cycle.delete(:pause).present?
+
     cycle.each { |x| Pins.on(x) }
-    sleep(5)
+
+    s = Time.now
+    until Time.now - s > duration
+      raise "ABORT!" if RPi::GPIO.high? Pins.red_button
+      printf '.'
+      sleep 0.1
+    end
+
     cycle.each { |x| Pins.off(x) }
+
+    if pause
+      p = cycle.select { |x| x.to_s.include?('return') || x == :drain }
+      warn "Pause #{p.inspect}"
+      Pins.on(p[0])
+      sleep(1)
+      Pins.off(p[0])
+    end
   end
 
   def settings
-    @_s ||= JSON.parse(redis.get('cycle_settings'), symbolize_names: true)
+    @_s ||= JSON.parse((redis.get('cycle_settings') || '{}'), symbolize_names: true)
   end
 
   def redis
