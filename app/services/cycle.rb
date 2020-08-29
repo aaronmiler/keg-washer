@@ -1,18 +1,16 @@
 module Cycle
 
-  cycles = {
-    drain: %i[ drain ],
-    flush: %i[ drain water ],
-    water: %i[ pump drain ],
+  @cycles = {
+    empty: %i[ drain pause ],
+    water: %i[ pump drain water pause ],
     air: %i[ air drain pause ],
-    cleaner: %i[ pump cleaner cleaner_return water ],
-    sani: %i[ pump sani sani_return water ],
+    cleaner: %i[ pump cleaner cleaner_return water pause ],
+    sani: %i[ pump sani sani_return water pause ],
     co2: %i[ co2 drain ],
   }
 
-  routine = [
-    :drain,
-    :flush,
+  @routine = [
+    :empty,
     :water,
     :air,
     :cleaner,
@@ -30,14 +28,22 @@ module Cycle
   module_function
 
   def run
+    Pins.setup_pins
     redis.set("start_time", Time.now)
-    routine.each_with_index do |s, i|
+
+    @routine.each_with_index do |s, i|
       redis.set("current_step", i)
       step(s)
     end
+    redis.set("completed", Time.now)
+    "Complete"
   end
 
-  def step(instructions)
+  def step(step)
+    cycle = @cycles[step]
+    cycle.each { |x| Pins.on(x) }
+    sleep(5)
+    cycle.each { |x| Pins.off(x) }
   end
 
   def settings

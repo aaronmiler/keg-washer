@@ -3,24 +3,53 @@ class Pins
     @pin_map = {
       green_button: 11,
       red_button: 12,
-      pump: 10,
-      water: 10,
-      drain: 10,
-      cleaner: 10,
-      cleaner_drain: 10,
-      sani: 10,
-      sani_drain: 10,
-      air: 10,
-      co2: 10,
-      relay_10: 10,
-      red_light: 10,
-      yellow_light: 10,
-      green_light: 10,
+      pump: 31,
+      water: 36,
+      drain: 29,
+      cleaner: 22,
+      cleaner_drain: 40,
+      sani: 37,
+      sani_drain: 33,
+      air: 35,
+      co2: 38,
+      # UNSUED --- \/
+      relay_8: 13,
+      # UNSUED --- ^
+      red_light: 16,
+      yellow_light: 15,
+      green_light: 32,
     }
     @pin_map.each do |name, pin|
       define_method(name) do
         return pin
       end
+    end
+
+    def on(pin)
+      warn "Turning on #{pin}"
+      return unless Rails.application.config.raspi
+      RPi::GPIO.set_high self.send(pin)
+    end
+
+    def off(pin)
+      warn "Turning off #{pin}"
+      return unless Rails.application.config.raspi
+      RPi::GPIO.set_high self.send(pin)
+    end
+
+    def setup_pins
+      warn "Setting Pins"
+      return unless Rails.application.config.raspi
+
+      RPi::GPIO.set_numbering :board
+      @pin_map.values.each do |p|
+        RPi::GPIO.setup p, as: :output
+      end
+    end
+
+    def cleanup
+      return unless Rails.application.config.raspi
+      RPi::GPIO.reset
     end
   end
 end
