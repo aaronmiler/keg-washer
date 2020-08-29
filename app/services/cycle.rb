@@ -5,8 +5,8 @@ module Cycle
     flush: %i[ drain water ],
     water: %i[ pump drain ],
     air: %i[ air drain pause ],
-    cleaner: %i[ pump cleaner cleaner_return water ]
-    sani: %i[ pump sani sani_return water ]
+    cleaner: %i[ pump cleaner cleaner_return water ],
+    sani: %i[ pump sani sani_return water ],
     co2: %i[ co2 drain ],
   }
 

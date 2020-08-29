@@ -35,7 +35,7 @@ gem 'slim-rails'
 gem 'daemons'
 
 if RUBY_PLATFORM =~ /armv7l-linux-eabihf/
-  gem 'rpi_gpio'
+  gem 'rpi_gpio', '~> 0.4.0'
 end
 
 

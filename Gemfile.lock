@@ -132,6 +132,7 @@ GEM
     redis (4.2.1)
     redis-namespace (1.8.0)
       redis (>= 3.0.4)
+    rpi_gpio (0.4.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -201,6 +202,7 @@ DEPENDENCIES
   rails (~> 6.0.3, >= 6.0.3.2)
   redis
   redis-namespace
+  rpi_gpio (~> 0.4.0)
   sass-rails (>= 6)
   sidekiq
   slim-rails

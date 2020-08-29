@@ -1,4 +1,4 @@
-class Pin
+class Pins
   class << self
     @pin_map = {
       green_button: 11,
