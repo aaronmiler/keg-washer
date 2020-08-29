@@ -34,6 +34,10 @@ gem 'sidekiq'
 gem 'slim-rails'
 gem 'daemons'
 
+if RUBY_PLATFORM =~ /armv7l-linux-eabihf/
+  gem 'rpi_gpio'
+end
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
