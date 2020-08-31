@@ -1,14 +1,9 @@
-h1 Hello
+h1 Keg Washer Deluxe
 #app
 
 = react 'App', 'app', { \
+  settings: @settings,
   baseUrl: Rails.configuration.host,
   red: {},
   green: {},
 }
-
-
-= link_to 'Send Message', broadcast_path(button: 'red', message: 'Hello World'), remote: true
-
-= link_to 'Set Red Off', button_path(button: 'red', value: false), remote: true
-= link_to 'Set Green Off', button_path(button: 'red', value: false), remote: true

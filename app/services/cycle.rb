@@ -6,7 +6,8 @@ module Cycle
     air: %i[ air drain pause ],
     cleaner: %i[ pump cleaner cleaner_return water pause ],
     sani: %i[ pump sani sani_return water pause ],
-    co2: %i[ co2 drain ],
+    purge: %i[ co2 drain ],
+    pressurize: %i[ co2 ],
   }
 
   @routine = [
@@ -17,7 +18,8 @@ module Cycle
     :air,
     :sani,
     :air,
-    :co2,
+    :purge,
+    :pressurize,
   ]
 
   # step
@@ -53,10 +55,11 @@ module Cycle
 
     s = Time.now
     until Time.now - s > duration
-      raise "ABORT!" if RPi::GPIO.high? Pins.red_button
+      raise "ABORT!" if Rails.application.config.raspi && RPi::GPIO.high?(Pins.red_button)
       printf '.'
       sleep 0.1
     end
+    warn ''
 
     cycle.each { |x| Pins.off(x) }
 
