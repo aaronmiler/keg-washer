@@ -30,7 +30,7 @@ export default class SettingsInput extends PureComponent {
           enabled
           required
           keyboardClassName="Keyboard"
-          type="number"
+          type="text"
           onChange={this.updateValue}
           onBlur={this.submit}
           value={this.state.value}
