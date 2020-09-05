@@ -2,6 +2,7 @@ h1 Keg Washer Deluxe
 #app
 
 = react 'App', 'app', { \
+  raspi: Rails.application.config.raspi,
   settings: @settings,
   baseUrl: Rails.configuration.host,
   red: {},

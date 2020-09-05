@@ -14,19 +14,14 @@ counts = Hash.new(0)
 
 loop do
   if RPi::GPIO.low? Pins.green_button
-    ButtonChannel.broadcast_to('green', { state: true })
     counts[:green] = 0
   else
-    ButtonChannel.broadcast_to('green', { state: false }) if counts[:green] = 5
     counts[:green] += 1
   end
 
-  if RPi::GPIO.high? Pins.red_button
-    ButtonChannel.broadcast_to('red', { state: true })
-    counts[:red] = 0
-  else
-    ButtonChannel.broadcast_to('red', { state: false }) if counts[:red] = 5
-    counts[:red] += 1
+  if counts[:green] > 5
+    Cycle.run
   end
+
   sleep(0.1)
 end

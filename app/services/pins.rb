@@ -1,5 +1,6 @@
 class Pins
   PIN_MAP = {
+    # Here for reference, but used other places
     green_button: 11,
     red_button: 12,
     pump: 31,
@@ -18,6 +19,8 @@ class Pins
     yellow_light: 15,
     green_light: 32,
   }
+
+  SKIP_SETUP = %i[ green_button ]
 
   class << self
     PIN_MAP.each do |name, pin|
@@ -44,6 +47,7 @@ class Pins
 
       RPi::GPIO.set_numbering :board
       PIN_MAP.each do |name, p|
+        next if SKIP_SETUP.include?(name)
         if name.to_s.include? 'button'
           RPi::GPIO.setup p, as: :input, pull: :up
         else

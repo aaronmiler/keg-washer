@@ -11,6 +11,9 @@ import SettingsInput from 'packs/components/SettingsInput'
 export default class AppLayout extends Component {
   constructor(props) {
     super(props);
+    props.data.currentView = 'settings'
+
+    this.raspi = props.data.raspi
 
     // Assume you pass your data into props as myData
     var myCortex = new Cortex(props.data, (updatedCortex) => {
@@ -35,18 +38,25 @@ export default class AppLayout extends Component {
     return(
       <div>
         <ActionCableProvider cable={consumer}>
-          { Object.entries(this.state.data.settings.val()).map(([k, v]) => {
-            return(
-              <SettingsInput
-                key={k}
-                title={`${k} Time`}
-                value={ v || 20 }
-                name={k}
-                updateSetting={this.updateSetting}
-              />
-            )
-          })}
+          { this.state.data.currentView.val() == 'settings' && (
+            Object.entries(this.state.data.settings.val()).map(([k, v]) => {
+              return(
+                <SettingsInput
+                  key={k}
+                  title={`${k} Time`}
+                  value={ v || 20 }
+                  name={k}
+                  updateSetting={this.updateSetting}
+                />
+              )
+            })
+          )}
         </ActionCableProvider>
+        { !this.raspi && (
+          <>
+            Put some actions here to test as if the raspi was running a cycle.
+          </>
+        )}
       </div>
     )
   }
