@@ -20,7 +20,7 @@ class Pins
     green_light: 32,
   }
 
-  SKIP_SETUP = %i[ green_button ]
+  SKIP_SETUP = %i[ green_button red_light yellow_light green_light ]
 
   class << self
     PIN_MAP.each do |name, pin|
@@ -58,7 +58,10 @@ class Pins
 
     def cleanup
       return unless Rails.application.config.raspi
-      RPi::GPIO.reset
+      PIN_MAP.each do |name, p|
+        next if SKIP_SETUP.include?(name)
+        RPi::GPIO.clean_up p
+      end
     end
   end
 end

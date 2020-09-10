@@ -31,6 +31,7 @@ module Cycle
 
   def run
     Pins.setup_pins
+    raise "ABORT!" if Rails.application.config.raspi && RPi::GPIO.high?(Pins.red_button)
     redis.set("start_time", Time.now)
 
     @routine.each_with_index do |s, i|
@@ -45,7 +46,7 @@ module Cycle
   end
 
   def step(step)
-    duration = settings[step] || 5
+    duration = (settings[step] || 5).to_i
     warn "Cycle: #{step}"
 
     cycle = @cycles[step]
