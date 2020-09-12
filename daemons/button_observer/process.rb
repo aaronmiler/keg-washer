@@ -12,14 +12,33 @@ Rails.application.eager_load!
 RPi::GPIO.set_numbering :board
 RPi::GPIO.setup Pins.green_button, as: :input, pull: :up
 RPi::GPIO.setup Pins.red_light, as: :output, initialize: :low
-RPi::GPIO.setup Pins.yellow_light, as: :output, initialize: :low
 RPi::GPIO.setup Pins.green_light, as: :output, initialize: :low
+RPi::GPIO.setup Pins.yellow_light, as: :output, initialize: :low
 
+def flash_yellow
+  clear_lights
+  Thread.new {
+    loop do
+      Pins.on(:yellow_light)
+      sleep(1)
+      Pins.off(:yellow_light)
+      sleep(1)
+    end
+  }
+end
 
 def clear_lights
   Pins.off(:green_light)
   Pins.off(:yellow_light)
   Pins.off(:red_light)
+end
+
+def light_on(color)
+  clear_lights
+  case color
+    when :green then Pins.on(:green_light)
+    when :red then Pins.on(:red_light)
+  end
 end
 
 begin
@@ -35,16 +54,15 @@ begin
 
     begin
       if count > 2
-        clear_lights
-        Pins.on(:yellow_light)
+        t = flash_yellow
         warn "Starting Cycle"
         Cycle.run
-        clear_lights
-        Pins.on(:green_light)
+        t.exit
+        light_on(:green)
       end
     rescue
-      clear_lights
-      Pins.on(:red_light)
+      t.exit
+      light_on(:red)
       puts "Cycle Aborted"
     end
 
